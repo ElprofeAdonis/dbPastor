@@ -1,0 +1,137 @@
+// database/schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Secretario {
+  id      Int    @default(autoincrement()) @id
+  nombre  String
+  apellido String
+  telefono String?
+  usuario Usuario?
+}
+
+model Pastor {
+  id      Int    @default(autoincrement()) @id
+  nombre  String
+  apellido String
+  telefono String?
+  fecha_ordenacion DateTime? @db.Date
+  iglesias Iglesia[]
+  citas_asignadas CitaVisita[]
+  peticiones_asignadas PeticionOracion[] @relation("SeguimientoPeticion")
+  bautismos_realizados Bautismo[]
+  usuario Usuario?
+}
+
+model Iglesia {
+  id      Int    @default(autoincrement()) @id
+  nombre  String @unique
+  direccion String?
+  pastor_id Int
+  pastor    Pastor @relation(fields: [pastor_id], references: [id])
+  miembros Miembro[]
+  bautismos Bautismo[]
+}
+
+model Miembro {
+  id      Int    @default(autoincrement()) @id
+  nombre  String
+  apellido String
+  telefono String?
+  fecha_nacimiento DateTime? @db.Date
+  iglesia_id Int
+  iglesia    Iglesia @relation(fields: [iglesia_id], references: [id])
+ 
+  citas_solicitadas CitaVisita[]
+  peticiones_creadas PeticionOracion[]
+  bautismo_registro Bautismo?
+  oraciones_realizadas OracionMiembro[]
+  usuario Usuario?
+}
+
+enum Role {
+  Secretario
+  Pastor
+  Miembro
+}
+
+model Usuario {
+  id      Int    @default(autoincrement()) @id
+  email   String @unique
+  contrasena_hash String @db.VarChar(255)
+  rol     Role
+  secretario_id Int? @unique
+  secretario Secretario? @relation(fields: [secretario_id], references: [id])
+  pastor_id Int? @unique
+  pastor Pastor? @relation(fields: [pastor_id], references: [id])
+  miembro_id Int? @unique
+  miembro Miembro? @relation(fields: [miembro_id], references: [id])
+}
+
+model CitaVisita {
+  id        Int      @default(autoincrement()) @id
+  fecha     DateTime @db.Date
+  hora_inicio DateTime @db.Time
+  tema_tratado String @db.VarChar(100)
+  modalidad String @db.VarChar(50)
+  estado    String @default("Pendiente") @db.VarChar(50)
+  notas_pastor String? @db.Text
+  miembro_id Int
+  miembro    Miembro @relation(fields: [miembro_id], references: [id])
+  pastor_id Int
+  pastor    Pastor @relation(fields: [pastor_id], references: [id])
+}
+
+model PeticionOracion {
+  id        Int      @default(autoincrement()) @id
+  titulo    String?
+  contenido String @db.Text
+  privacidad String @default("Solo Pastor") @db.VarChar(50)
+  fecha_solicitud DateTime @default(now())
+  estado    String @default("Pendiente") @db.VarChar(50)
+  miembro_id Int
+  miembro    Miembro @relation(fields: [miembro_id], references: [id])
+  pastor_seguimiento_id Int?
+  pastor_seguimiento    Pastor? @relation("SeguimientoPeticion", fields: [pastor_seguimiento_id], references: [id])
+  oraciones_recibidas OracionMiembro[]
+}
+
+model OracionMiembro {
+  id Int @default(autoincrement()) @id
+  fecha_oracion DateTime @default(now())
+  peticion_id Int
+  peticion PeticionOracion @relation(fields: [peticion_id], references: [id])
+  miembro_id Int
+  miembro Miembro @relation(fields: [miembro_id], references: [id])
+  @@unique([peticion_id, miembro_id])
+}
+
+model Bautismo {
+  id              Int      @default(autoincrement()) @id
+  fecha_bautismo  DateTime @db.Date
+  lugar_bautismo  String?
+  observaciones   String? @db.Text
+  miembro_id Int @unique
+  miembro Miembro @relation(fields: [miembro_id], references: [id])
+  pastor_id Int
+  pastor    Pastor @relation(fields: [pastor_id], references: [id])
+  iglesia_id Int
+  iglesia    Iglesia @relation(fields: [iglesia_id], references: [id])
+}
+
+model MensajeMotivacion {
+  id      Int      @default(autoincrement()) @id
+  emisor_rol String @db.VarChar(50)
+  emisor_id Int
+  contenido String @db.Text
+  dirigido_a String @db.VarChar(50)
+  fecha_programada DateTime
+  estado String @default("Borrador") @db.VarChar(50)
+}
