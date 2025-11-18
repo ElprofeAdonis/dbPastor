@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
 import { login } from "../services/AuthService.js";
 
-/**
- * 🎯 Manejador del endpoint POST /api/auth/login
- */
+
 export const loginHandler = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
@@ -14,7 +12,6 @@ export const loginHandler = async (req: Request, res: Response) => {
     try {
         const result = await login(email, password);
 
-        // Envía el token, rol y el ID de referencia (para que la app sepa quién es)
         res.status(200).json({
             message: "Login exitoso",
             token: result.token,
@@ -23,7 +20,7 @@ export const loginHandler = async (req: Request, res: Response) => {
         });
 
     } catch (error) {
-        // Manejar errores específicos de credenciales y errores internos
+
         const errorMessage = error instanceof Error ? error.message : "Error desconocido";
 
         if (errorMessage.includes("Credenciales inválidas")) {
