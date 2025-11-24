@@ -1,21 +1,32 @@
-import { PrismaClient, Role } from '@prisma/client';
+// src/services/AuthService.ts
+
+import { PrismaClient, Rol } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
-const JWT_SECRET = process.env.JWT_SECRET as string;
+// Usamos process.env.JWT_SECRET, que se carga con dotenv en server.ts
+const JWT_KEY_SIGN = process.env.JWT_SECRET || 'mi_secreto_super_seguro_cambialo';
+
+// =================================================================
+// FUNCIONES DE HASHING (REINTRODUCIDAS AQUÍ PARA EL REGISTRO)
+// =================================================================
 
 export const hashPassword = async (password: string): Promise<string> => {
     const saltRounds = 10;
     return bcrypt.hash(password, saltRounds);
 };
+
 export const comparePassword = async (password: string, hash: string): Promise<boolean> => {
-    return bcrypt.compare(password, hash);
+    const isMatch = await bcrypt.compare(password, hash);
+    return isMatch;
 };
+// =================================================================
+
 interface LoginResult {
     token: string;
-    rol: Role;
-    referenciaId: number;
+    rol: Rol;
+    referenciaId: string;
 }
 
 export const login = async (email: string, password: string): Promise<LoginResult> => {
@@ -24,42 +35,52 @@ export const login = async (email: string, password: string): Promise<LoginResul
         select: {
             id: true,
             rol: true,
-            contrasena_hash: true,
-            secretario_id: true,
-            pastor_id: true,
-            miembro_id: true,
+            password: true,
+            pastorInfo: { select: { id: true } },
+            miembroInfo: { select: { id: true } },
         },
     });
+
     if (!usuario) {
         throw new Error("Credenciales inválidas (Usuario no encontrado)");
     }
-    const passwordMatch = await comparePassword(password, usuario.contrasena_hash);
+
+    // Verificación de contraseña
+    const passwordMatch = await comparePassword(password, usuario.password);
+
     if (!passwordMatch) {
         throw new Error("Credenciales inválidas (Contraseña incorrecta)");
     }
-    let referenciaId: number | null = null;
+
+    let referenciaId: string | null = null;
 
     switch (usuario.rol) {
-        case Role.Secretario:
-            referenciaId = usuario.secretario_id;
+        case Rol.SuperADMIN:
+        case Rol.SECRETARIAAsociacion:
+        case Rol.SECRETARIAIglesia:
+            referenciaId = usuario.id;
             break;
-        case Role.Pastor:
-            referenciaId = usuario.pastor_id;
+        case Rol.PASTOR:
+            referenciaId = usuario.pastorInfo?.id || null;
             break;
-        case Role.Miembro:
-            referenciaId = usuario.miembro_id;
+        case Rol.MIEMBRO:
+            referenciaId = usuario.miembroInfo?.id || null;
             break;
     }
 
-    if (referenciaId === null || referenciaId === undefined) {
+    if (!referenciaId) {
         throw new Error("Error interno: Perfil de usuario no encontrado o mal enlazado.");
     }
+
     const payload = {
         id: usuario.id,
         rol: usuario.rol,
         referenciaId: referenciaId,
     };
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' }); // Token válido por 8 horas
+
+    // Usamos JWT_KEY_SIGN para firmar el token
+    const token = jwt.sign(payload, JWT_KEY_SIGN, { expiresIn: '8h' });
+
     return {
         token,
         rol: usuario.rol,

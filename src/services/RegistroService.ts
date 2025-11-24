@@ -1,7 +1,7 @@
 // src/services/RegistroService.ts
 
 import { PrismaClient, Rol } from '@prisma/client';
-import { hashPassword } from '../services/AuthService.js'; // Necesario para hashear la contraseña
+import { hashPassword } from './AuthService.js'; // Necesario para hashear la contraseña
 
 const prisma = new PrismaClient();
 

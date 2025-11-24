@@ -4,7 +4,9 @@ import express from 'express';
 import protectedRoutes from './routes/protectedRoute.js';
 //import cors from 'cors'; 
 
+
 import authRoutes from './routes/auth.js';
+import registrRoutes from './routes/registro.js'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -22,6 +24,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 
 app.use('/api/data', protectedRoutes);
+app.use('/api/registro', registrRoutes);
 
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
