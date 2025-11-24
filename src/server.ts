@@ -1,6 +1,7 @@
 
 
 import express from 'express';
+import protectedRoutes from './routes/protectedRoute.js';
 //import cors from 'cors'; 
 
 import authRoutes from './routes/auth.js';
@@ -19,6 +20,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+
+app.use('/api/data', protectedRoutes);
 
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);

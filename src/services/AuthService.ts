@@ -3,7 +3,7 @@ import * as bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
-const JWT_SECRET = process.env.JWT_SECRET || 'mi_secreto_super_seguro_cambialo';
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export const hashPassword = async (password: string): Promise<string> => {
     const saltRounds = 10;

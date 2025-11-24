@@ -1,0 +1,42 @@
+import { Router } from "express";
+import { authenticateToken } from "../middlewares/authMiddleware.js";
+import { authorizeRole } from "../middlewares/authorizeRole.js";
+
+const router = Router();
+
+router.get("/solo-pastor",
+    authenticateToken,
+    authorizeRole(["Pastor"]),
+    (req, res) => {
+        // @ts-ignore
+        res.json({ message: "Ruta SOLO Pastores", user: req.user });
+    }
+);
+
+router.get("/solo-secretario",
+    authenticateToken,
+    authorizeRole(["Secretario"]),
+    (req, res) => {
+        // @ts-ignore
+        res.json({ message: "Ruta SOLO Secretarios", user: req.user });
+    }
+);
+
+router.get("/solo-miembro",
+    authenticateToken,
+    authorizeRole(["Miembro"]),
+    (req, res) => {
+        // @ts-ignore
+        res.json({ message: "Ruta SOLO Miembros", user: req.user });
+    }
+);
+
+router.get("/todos-autenticados",
+    authenticateToken,
+    (req, res) => {
+        // @ts-ignore
+        res.json({ message: "Usuario autenticado", user: req.user });
+    }
+);
+
+export default router;
