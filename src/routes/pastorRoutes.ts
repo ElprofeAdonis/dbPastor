@@ -43,8 +43,6 @@ router.get("/iglesias", ...soloPastor, async (req, res) => {
     // @ts-ignore
     const user = req.user!;
 
-    // Manejo especial para SuperADMIN: podría devolver todas las iglesias, o forzar el token de PASTOR.
-    // Aquí forzaremos la prueba con el token de PASTOR, a menos que se ajuste la lógica de servicio.
     if (user.rol === 'SuperADMIN') {
         return res.status(403).json({ message: "La ruta de iglesias es específica por Distrito. Use el token de un PASTOR real." });
     }
