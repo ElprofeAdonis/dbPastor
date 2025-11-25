@@ -8,19 +8,13 @@ const prisma = new PrismaClient();
 
 async function main() {
     console.log("🌱 Iniciando Seed...");
-
-    // --------------------------------------------------------------------
-    // 1. Crear Asociación
-    // --------------------------------------------------------------------
     const asociacion = await prisma.asociacion.create({
         data: {
             nombre: "Asociación Central", // 🔁 CAMBIA el nombre aquí
         },
     });
 
-    // --------------------------------------------------------------------
-    // 2. Crear Distrito
-    // --------------------------------------------------------------------
+
     const distrito = await prisma.distrito.create({
         data: {
             nombre: "Distrito Norte", // 🔁 CAMBIA el nombre aquí
@@ -28,9 +22,7 @@ async function main() {
         },
     });
 
-    // --------------------------------------------------------------------
-    // 3. Crear Iglesia
-    // --------------------------------------------------------------------
+
     const iglesia = await prisma.iglesia.create({
         data: {
             nombre: "Iglesia Central", // 🔁 CAMBIA
@@ -41,10 +33,8 @@ async function main() {
         },
     });
 
-    // --------------------------------------------------------------------
-    // 4. Crear SuperADMIN
-    // --------------------------------------------------------------------
-    const hashedPass = await bcrypt.hash("Admin123*", 10); // 🔁 CAMBIA contraseña si quieres
+
+    const hashedPass = await bcrypt.hash("Admin123*", 10);
 
     const superAdmin = await prisma.usuario.create({
         data: {

@@ -1,6 +1,6 @@
 import { PrismaClient, Rol } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
-
+import * as jwt from "jsonwebtoken";
 const prisma = new PrismaClient();
 const JWT_KEY_SIGN = process.env.JWT_SECRET || 'mi_super_clave';
 
