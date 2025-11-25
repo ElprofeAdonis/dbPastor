@@ -1,16 +1,8 @@
-// src/services/AuthService.ts
-
 import { PrismaClient, Rol } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
-// Usamos process.env.JWT_SECRET, que se carga con dotenv en server.ts
-const JWT_KEY_SIGN = process.env.JWT_SECRET || 'mi_secreto_super_seguro_cambialo';
-
-// =================================================================
-// FUNCIONES DE HASHING (REINTRODUCIDAS AQUÍ PARA EL REGISTRO)
-// =================================================================
+const JWT_KEY_SIGN = process.env.JWT_SECRET || 'mi_super_clave';
 
 export const hashPassword = async (password: string): Promise<string> => {
     const saltRounds = 10;
@@ -21,8 +13,6 @@ export const comparePassword = async (password: string, hash: string): Promise<b
     const isMatch = await bcrypt.compare(password, hash);
     return isMatch;
 };
-// =================================================================
-
 interface LoginResult {
     token: string;
     rol: Rol;
@@ -30,6 +20,7 @@ interface LoginResult {
 }
 
 export const login = async (email: string, password: string): Promise<LoginResult> => {
+    const jwt = await import('jsonwebtoken');
     const usuario = await prisma.usuario.findUnique({
         where: { email },
         select: {
@@ -45,7 +36,6 @@ export const login = async (email: string, password: string): Promise<LoginResul
         throw new Error("Credenciales inválidas (Usuario no encontrado)");
     }
 
-    // Verificación de contraseña
     const passwordMatch = await comparePassword(password, usuario.password);
 
     if (!passwordMatch) {
@@ -78,7 +68,6 @@ export const login = async (email: string, password: string): Promise<LoginResul
         referenciaId: referenciaId,
     };
 
-    // Usamos JWT_KEY_SIGN para firmar el token
     const token = jwt.sign(payload, JWT_KEY_SIGN, { expiresIn: '8h' });
 
     return {

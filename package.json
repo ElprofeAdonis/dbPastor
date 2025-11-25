@@ -14,20 +14,21 @@
     "seed": "node --loader ts-node/esm src/database/seed.ts"
   },
   "keywords": [],
-  "author": "",
+  "author": "apdsolutions5@gmail.com",
   "license": "ISC",
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.5",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.10.1",
+    "bcryptjs": "^3.0.3",
     "prisma": "^6.19.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "dependencies": {
     "@prisma/client": "^6.19.0",
-    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2"
