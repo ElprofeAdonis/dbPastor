@@ -4,38 +4,57 @@ import { authorizeRole } from "../middlewares/authorizeRole.js";
 
 const router = Router();
 
-router.get("/solo-pastor",
+/**
+ * RUTA SOLO PARA PASTORES
+ */
+router.get(
+    "/solo-pastor",
     authenticateToken,
-    authorizeRole(["Pastor"]),
+    authorizeRole(["pastor", "superadmin"]),
     (req, res) => {
-        // @ts-ignore
-        res.json({ message: "Ruta SOLO Pastores", user: req.user });
+        res.json({
+            message: "Ruta SOLO para Pastores",
+            user: req.user
+        });
     }
 );
 
-router.get("/solo-secretario",
+router.get(
+    "/solo-secretario",
     authenticateToken,
-    authorizeRole(["Secretario"]),
+    authorizeRole(["secretario", "superadmin"]),
     (req, res) => {
-        // @ts-ignore
-        res.json({ message: "Ruta SOLO Secretarios", user: req.user });
+        res.json({
+            message: "Ruta SOLO para Secretarios",
+            user: req.user
+        });
     }
 );
 
-router.get("/solo-miembro",
+router.get(
+    "/solo-miembro",
     authenticateToken,
-    authorizeRole(["Miembro"]),
+    authorizeRole(["miembro", "superadmin"]),
     (req, res) => {
-        // @ts-ignore
-        res.json({ message: "Ruta SOLO Miembros", user: req.user });
+        res.json({
+            message: "Ruta SOLO para Miembros",
+            user: req.user
+        });
     }
 );
 
-router.get("/todos-autenticados",
+
+/**
+ * RUTA PARA TODOS LOS USUARIOS AUTENTICADOS
+ */
+router.get(
+    "/todos-autenticados",
     authenticateToken,
     (req, res) => {
-        // @ts-ignore
-        res.json({ message: "Usuario autenticado", user: req.user });
+        res.json({
+            message: "Usuario autenticado correctamente",
+            user: req.user
+        });
     }
 );
 

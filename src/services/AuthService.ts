@@ -1,6 +1,6 @@
 import { PrismaClient, Rol } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
 const JWT_KEY_SIGN = process.env.JWT_SECRET || 'mi_super_clave';
@@ -20,6 +20,7 @@ interface LoginResult {
 }
 
 export const login = async (email: string, password: string): Promise<LoginResult> => {
+
     const usuario = await prisma.usuario.findUnique({
         where: { email },
         select: {

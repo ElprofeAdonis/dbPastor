@@ -9,9 +9,10 @@ export const authorizeRole = (rolesPermitidos: string[]) => {
             return res.status(401).json({ message: "No autenticado" });
         }
 
-        if (!rolesPermitidos.includes(user.rol)) {
+        if (!rolesPermitidos.map(r => r.toLowerCase()).includes(user.rol.toLowerCase())) {
             return res.status(403).json({ message: "No tienes permiso" });
         }
+
 
         next();
     };
