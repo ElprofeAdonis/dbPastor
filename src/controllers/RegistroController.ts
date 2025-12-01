@@ -28,3 +28,23 @@ export const registrarSuperAdminHandler = async (req: Request, res: Response) =>
         return res.status(409).json({ message: errorMessage });
     }
 };
+export const registrarSecretariaHandler = async (req: Request, res: Response) => {
+    try {
+        const data = {
+            ...req.body,
+            rol: "SECRETARIAIglesia"
+        };
+
+        const nuevaSecretaria = await registrarUsuario(data);
+
+        return res.status(201).json({
+            message: "Secretaria creada correctamente",
+            secretaria: nuevaSecretaria
+        });
+
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Error desconocido al registrar el SECRETARIA.";
+        return res.status(409).json({ message: errorMessage });
+    }
+};
+
