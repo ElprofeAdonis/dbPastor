@@ -5,6 +5,7 @@ import authRoutes from './routes/auth.js';
 import registrRoutes from './routes/registro.js'
 import pastorRoutes from "./routes/pastorRoutes.js";
 import iglesiaRoutes from "./routes/iglesiaRoutes.js";
+import asociacionRouues from "./routes/asociacionRoutes.js"
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,6 +22,7 @@ app.use('/api/data', protectedRoutes);
 app.use('/api/registro', registrRoutes);
 app.use("/api/pastor", pastorRoutes);
 app.use("/api/iglesia", iglesiaRoutes);
+app.use("/api/asociacion", asociacionRouues)
 
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);

@@ -17,6 +17,7 @@ interface RegistroData {
     licenciaPastoral?: string; // Solo para Pastor
     fechaNacimiento?: string; // Solo para Miembro
     iglesiaId?: string; // Para Miembro o Secretaria
+    asociacionId?: string;
 }
 
 /**
@@ -79,6 +80,8 @@ export const registrarUsuario = async (data: RegistroData) => {
 
             // Enlace de Secretaria de Iglesia
             iglesiaId: data.rol === Rol.SECRETARIAIglesia ? data.iglesiaId : null,
+
+            asociacionId: data.rol === Rol.SECRETARIAAsociacion ? data.asociacionId : null,
         }
     });
 
