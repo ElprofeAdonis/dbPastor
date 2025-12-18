@@ -7,6 +7,7 @@ declare global {
             id: string;
             rol: Rol;
             referenciaId: string;
+            asociacionId?: string;
             iat?: number;
             exp?: number;
         }

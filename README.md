@@ -130,5 +130,37 @@ Authorization: Bearer TU_TOKEN_AQUI
   }
 }
 
+## esta ruta hace la peticion de En una sola petición ya tienes:
+
+Datos del Distrito
+
+Todas las Iglesias del distrito
+
+Los Pastores (por iglesia + listado general)
+
+http://localhost:3000/api/distrito/c508887b-208e-4f49-8abf-a6b60e13a4b6
+
+
+
+### El rol dice qué “papel” tiene:
+
+SuperADMIN → controla todo.
+
+SECRETARIAAsociacion → secretaria a nivel asociación.
+
+SECRETARIAIglesia → secretaria a nivel iglesia.
+
+PASTOR → pastor.
+
+MIEMBRO → miembro.
+
+Los campos asociacionId y iglesiaId en Usuario NO son para pastor:
+
+asociacionId en Usuario → se usa cuando el usuario es SECRETARIAAsociacion.
+
+iglesiaId en Usuario → se usa cuando el usuario es SECRETARIAIglesia.
+
+El Pastor se vincula a asociación y distrito desde el modelo Pastor, no desde Usuario.
+
 ### en la terminal 
 ## esto es la parte ce ver las tablas mas claras con este comando npx prisma studio

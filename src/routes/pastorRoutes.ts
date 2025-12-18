@@ -8,6 +8,16 @@ import {
     registrarBautismo,
     getPastorBautismos
 } from "../services/PastorService.js";
+import {
+    asignarPastorController,
+    quitarPastorController,
+    moverPastorController,
+    pastoresDeDistritoController,
+    crearPastorController,
+    pastoresDeAsociacionController,
+    estructuraPastoresGlobalController
+} from "../controllers/pastorController.js";
+
 
 const router = Router();
 
@@ -17,6 +27,17 @@ const soloPastor = [
     authenticateToken,
     authorizeRole(["PASTOR", "SuperADMIN"]) // Roles permitidos: PASTOR y SuperADMIN
 ];
+
+const soloAdmin = [
+    authenticateToken,
+    authorizeRole(["SuperADMIN"])
+];
+
+const soloSecretaria = [
+    authenticateToken,
+    authorizeRole(["SECRETARIAAsociacion", "SuperADMIN"])
+];
+
 
 // 1. Perfil del pastor
 router.get("/perfil", ...soloPastor, async (req, res) => {
@@ -109,6 +130,25 @@ router.get("/bautismos", ...soloPastor, async (req, res) => {
         return res.status(400).json({ message: error.message });
     }
 });
+// Crear pastor
+router.post("/", ...soloAdmin, crearPastorController);
+
+// Asignar pastor a distrito
+router.post("/asignar", ...soloAdmin, asignarPastorController);
+
+// Quitar pastor del distrito
+router.post("/quitar", ...soloAdmin, quitarPastorController);
+
+// Mover pastor a otro distrito
+router.post("/mover", ...soloAdmin, moverPastorController);
+
+// Listar pastores del distrito
+router.get("/distrito/:distritoId", ...soloSecretaria, pastoresDeDistritoController);
+
+// Listar pastores de la asociación
+router.get("/asociacion", ...soloSecretaria, pastoresDeAsociacionController);
+
+router.get("/estructura", ...soloAdmin, estructuraPastoresGlobalController);
 
 
 export default router;
