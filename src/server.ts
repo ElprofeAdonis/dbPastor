@@ -10,6 +10,7 @@ import distritoRoutes from "./routes/distritoRoutes.js"
 import usuarioRoutes from "./routes/usuarioRoutes.js"
 import dashboardRoutes from "./routes/dashboardRoutes.js"
 import estadisticasRoutes from "./routes/estadisticasRoutes.js"
+import reportesRoutes from "./routes/reportesRoutes.js"
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,6 +32,7 @@ app.use("/api/distrito", distritoRoutes)
 app.use("/api/usuario", usuarioRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/estadisticas", estadisticasRoutes)
+app.use("/api/reportes", reportesRoutes)
 
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
