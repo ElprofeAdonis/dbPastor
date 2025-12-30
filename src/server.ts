@@ -8,6 +8,8 @@ import iglesiaRoutes from "./routes/iglesiaRoutes.js";
 import asociacionRouues from "./routes/asociacionRoutes.js"
 import distritoRoutes from "./routes/distritoRoutes.js"
 import usuarioRoutes from "./routes/usuarioRoutes.js"
+import dashboardRoutes from "./routes/dashboardRoutes.js"
+import estadisticasRoutes from "./routes/estadisticasRoutes.js"
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +29,8 @@ app.use("/api/iglesia", iglesiaRoutes);
 app.use("/api/asociacion", asociacionRouues)
 app.use("/api/distrito", distritoRoutes)
 app.use("/api/usuario", usuarioRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/estadisticas", estadisticasRoutes)
 
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);

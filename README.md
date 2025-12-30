@@ -162,5 +162,17 @@ iglesiaId en Usuario → se usa cuando el usuario es SECRETARIAIglesia.
 
 El Pastor se vincula a asociación y distrito desde el modelo Pastor, no desde Usuario.
 
+--- importante para el dashborard
+
+## Service: obtenerEstructuraGlobal (asociaciones + distritos + iglesias + pastores + miembros)
+src/services/dashboardService.ts  
+
+
+### estadisticas/Global/dashboard-asociacion/asociacion
+esta funciona con secretaria 
+## para super admin ?asociacionId= hay qye agregar esta parte el id de la asociacion 
+
+---
+
 ### en la terminal 
 ## esto es la parte ce ver las tablas mas claras con este comando npx prisma studio
